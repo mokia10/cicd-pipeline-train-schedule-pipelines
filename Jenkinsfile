@@ -1,24 +1,12 @@
-pipeline { 
-    agent any 
-    options {
-        skipStagesAfterUnstable()
+pipeline {
+  agent any
+  stages {
+    stage ('Build') {
+      steps {
+        echo 'Running build automation'
+        sh './gradlew build --no-daemon'
+        archiveArtifacts artifacts: 'dist/trainSchedule.zip'
+      }
     }
-    stages {
-        stage('Build') { 
-            steps { 
-                sh 'make' 
-            }
-        }
-        stage('Test'){
-            steps {
-                sh 'make check'
-                junit 'reports/**/*.xml' 
-            }
-        }
-        stage('Deploy') {
-            steps {
-                sh 'make publish'
-            }
-        }
-    }
+  }
 }
